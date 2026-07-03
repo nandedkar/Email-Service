@@ -1,12 +1,12 @@
 import nodemailer from "nodemailer";
 import { emailConfig } from "../config/email";
 import { compileTemplate, loadTemplate } from "../utils/templates";
-import { WelcomeEmailData } from "../types/mail.types";
+import {
+  SendTemplateEmailOptions,
+  WelcomeEmailData,
+} from "../types/mail.types";
 import path from "path/win32";
-
-export enum EmailTemplate {
-  Welcome = "welcome",
-}
+import { EmailTemplate } from "../constants/email-template";
 
 class MailService {
   private transporter = nodemailer.createTransport({
@@ -27,16 +27,13 @@ class MailService {
     return this.transporter.sendMail(options);
   }
 
+  logoPath = path.join(process.cwd(), "files", "logo.png");
   async sendWelcomeEmail(data: WelcomeEmailData) {
     const { to, name, loginUrl } = data;
     const html = await loadTemplate(EmailTemplate.Welcome);
     const compiledHtml = compileTemplate(html, { name, loginUrl });
-    const invoicePath = path.join(
-      process.cwd(),
-      "files",
-      "sample.pdf",
-    );
-    const logoPath = path.join(process.cwd(), "files", "logo.png");
+    const invoicePath = path.join(process.cwd(), "files", "sample.pdf");
+    const logoPath = this.logoPath;
     return this.sendMail({
       from: `Workspace Team <${emailConfig.user}>`,
       to: to,
@@ -49,6 +46,33 @@ class MailService {
           path: invoicePath,
           contentType: "application/pdf",
         },
+        {
+          filename: "logo.png",
+          path: logoPath,
+          contentType: "image/png",
+          cid: "company-logo", // same cid value as in the html img src},
+        },
+      ],
+    });
+  }
+
+  async sendTemplateEmail(options: SendTemplateEmailOptions) {
+    const html = await loadTemplate(options.template);
+
+    const compiledHtml = compileTemplate(html, options.variables);
+
+    const logoPath = this.logoPath;
+    return this.sendMail({
+      from: `"Workspace Team" <${emailConfig.user}>`,
+
+      to: options.to,
+
+      subject: options.subject,
+
+      text: options.text,
+
+      html: compiledHtml,
+      attachments: [
         {
           filename: "logo.png",
           path: logoPath,

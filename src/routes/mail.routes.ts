@@ -2,6 +2,7 @@ import { Router } from "express";
 import { emailConfig } from "../config/email";
 import mailService from "../services/mail.service";
 import { compileTemplate, loadTemplate } from "../utils/templates";
+import { EmailTemplate } from "../constants/email-template";
 
 const router = Router();
 
@@ -36,10 +37,38 @@ router.get("/send", async (_req, res) => {
 
 router.get("/welcome", async (_req, res) => {
   try {
-    const info = await mailService.sendWelcomeEmail({
-      to: emailConfig.user,
-      name: "Manoj",
-      loginUrl: "https://magic.magicsoftwarexpc.co.uk/login",
+    const info = await mailService.sendTemplateEmail({
+      to: process.env.EMAIL_USER!,
+      subject: "Welcome",
+      template: EmailTemplate.Welcome,
+      text: "Welcome",
+      variables: {
+        name: "Manoj",
+        loginUrl: "https://workspace.com/login",
+      },
+    });
+    res.json({
+      success: true,
+      info,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error,
+    });
+  }
+});
+
+router.get("/otp", async (_req, res) => {
+  try {
+    const info = await mailService.sendTemplateEmail({
+      to: process.env.EMAIL_USER!,
+      subject: "OTP",
+      template: EmailTemplate.Otp,
+      text: "OTP",
+      variables: {
+        otp: "123456",
+      },
     });
     res.json({
       success: true,
