@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome Email</title>
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: #f4f6f9;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .wrapper {
+        width: 100%;
+        padding: 40px 0;
+        background: #f4f6f9;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: auto;
+        background: #ffffff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      .header {
+        background: #2563eb;
+        color: #ffffff;
+        text-align: center;
+        padding: 35px 20px;
+      }
+
+      .header h1 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .content {
+        padding: 40px 35px;
+        color: #444444;
+        line-height: 1.7;
+        font-size: 16px;
+      }
+
+      .content h2 {
+        margin-top: 0;
+        color: #222222;
+      }
+
+      .button-container {
+        text-align: center;
+        margin: 35px 0;
+      }
+
+      .button {
+        display: inline-block;
+        background: #2563eb;
+        color: #ffffff !important;
+        text-decoration: none;
+        padding: 14px 32px;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      .footer {
+        background: #f8f8f8;
+        text-align: center;
+        color: #777777;
+        font-size: 13px;
+        padding: 25px;
+      }
+
+      @media only screen and (max-width: 600px) {
+        .content {
+          padding: 30px 20px;
+        }
+
+        .header h1 {
+          font-size: 24px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <div class="container">
+        <div class="header">
+          <h1>Welcome!</h1>
+        </div>
+
+        <div class="content">
+          <h2>Hello {{name}},</h2>
+
+          <p>
+            Welcome! We're excited to have you on board. Your account has been
+            successfully created and is ready to use.
+          </p>
+
+          <p>Click the button below to sign in and get started.</p>
+
+          <div class="button-container">
+            <a href="{{loginUrl}}" class="button"> Login to Your Account </a>
+          </div>
+
+          <p>
+            If the button doesn't work, copy and paste the following link into
+            your browser:
+          </p>
+
+          <p style="word-break: break-all">{{loginUrl}}</p>
+
+          <p>We look forward to serving you.</p>
+
+          <p>
+            Regards,<br />
+            <strong>Your Team</strong>
+          </p>
+        </div>
+
+        <div class="footer">© 2026 Your Company. All rights reserved.</div>
+      </div>
+    </div>
+  </body>
+</html>

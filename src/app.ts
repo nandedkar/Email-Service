@@ -1,9 +1,11 @@
 import express from "express";
 import transporter from "./services/mail.service";
+import mailRoutes from "./routes/mail.routes";
 
 const app = express();
 
 app.use(express.json());
+app.use("/mail", mailRoutes);
 
 app.get("/", (_req, res) => {
   res.json({
