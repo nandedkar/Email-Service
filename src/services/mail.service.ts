@@ -1,5 +1,11 @@
 import nodemailer from "nodemailer";
 import { emailConfig } from "../config/email";
+import { compileTemplate, loadTemplate } from "../utils/templates";
+import { WelcomeEmailData } from "../types/mail.types";
+
+export enum EmailTemplate {
+  Welcome = "welcome",
+}
 
 class MailService {
   private transporter = nodemailer.createTransport({
@@ -18,6 +24,19 @@ class MailService {
 
   async sendMail(options: nodemailer.SendMailOptions) {
     return this.transporter.sendMail(options);
+  }
+
+  async sendWelcomeEmail(data: WelcomeEmailData) {
+    const { to, name, loginUrl } = data;
+    const html = await loadTemplate(EmailTemplate.Welcome);
+    const compiledHtml = compileTemplate(html, { name, loginUrl });
+    return this.sendMail({
+      from: `Workspace Team <${emailConfig.user}>`,
+      to: to,
+      subject: "Welcome to Workspace!",
+      text: `Hello ${name},\n\nWelcome to Workspace!`,
+      html: compiledHtml,
+    });
   }
 }
 

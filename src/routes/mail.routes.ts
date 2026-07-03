@@ -35,22 +35,22 @@ router.get("/send", async (_req, res) => {
 });
 
 router.get("/welcome", async (_req, res) => {
-  const html = await loadTemplate("welcome");
-  const compiledHtml = compileTemplate(html, {
-    name: "Manoj",
-    loginUrl: "https://example.com/login",
-  });
-  const info = await mailService.sendMail({
-    from: emailConfig.user,
-    to: emailConfig.user,
-    subject: "Welcome Email",
-    html: compiledHtml,
-  });
-  res.json({
-    success: true,
-    message: "Welcome email sent successfully.",
-    info,
-  });
+  try {
+    const info = await mailService.sendWelcomeEmail({
+      to: emailConfig.user,
+      name: "Manoj",
+      loginUrl: "https://magic.magicsoftwarexpc.co.uk/login",
+    });
+    res.json({
+      success: true,
+      info,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error,
+    });
+  }
 });
 
 export default router;
